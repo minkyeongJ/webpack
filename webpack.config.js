@@ -3,6 +3,10 @@ const path = require('path');
 const webpack = require('webpack');
 const childProcess = require('child_process');
 
+const dotenv = require('dotenv');
+dotenv.config();
+
+
 module.exports = {
   mode : 'development',
   entry: {
@@ -48,7 +52,12 @@ module.exports = {
         banner: `
             Commit version : ${childProcess.execSync('git rev-parse --short HEAD')}
             Committer name : ${childProcess.execSync('git config user.name')}
+            Commit Date : ${new Date().toLocaleString()}
         `
-    })
+    }),
+    new webpack.DefinePlugin({
+      dev: JSON.stringify(process.env.DEV_API),
+      pro: JSON.stringify(process.env.PRO_API)
+  })
 ]
 }
